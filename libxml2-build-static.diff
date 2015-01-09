@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6756848..100958e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -143,7 +143,7 @@ if(ENABLE_TRIO)
+     )
+ endif(ENABLE_TRIO)
+ 
+-add_library(xml2 SHARED ${libxml2_SRCS})
++add_library(xml2 STATIC ${libxml2_SRCS})
+ install(TARGETS xml2    RUNTIME DESTINATION bin
+                         LIBRARY DESTINATION lib
+                         ARCHIVE DESTINATION lib)

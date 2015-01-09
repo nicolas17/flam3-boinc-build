@@ -41,6 +41,7 @@ ExternalProject_Add(LibXml2
     URL ftp://xmlsoft.org/libxml2/libxml2-2.8.0.tar.gz
     URL_HASH SHA1=a0c553bd51ba79ab6fff26dc700004c6a41f5250
     PATCH_COMMAND ${PATCH_PROGRAM} -p1 < ${CMAKE_SOURCE_DIR}/libxml2-2.8.0.diff
+          COMMAND ${PATCH_PROGRAM} -p1 < ${CMAKE_SOURCE_DIR}/libxml2-build-static.diff
     CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
         -DCMAKE_PREFIX_PATH:STRING=${ZLIB_PREFIX}
