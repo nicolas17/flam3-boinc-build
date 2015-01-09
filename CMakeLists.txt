@@ -13,6 +13,7 @@ endif()
 
 ExternalProject_Add(ZLIB
     URL http://download.sourceforge.net/libpng/zlib/1.2.8/zlib-1.2.8.tar.gz
+    URL_HASH SHA1=a4d316c404ff54ca545ea71a27af7dbc29817088
     PATCH_COMMAND ${PATCH_PROGRAM} -p1 < ${CMAKE_SOURCE_DIR}/zlib-build-system.diff
     CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
@@ -24,6 +25,7 @@ set(ZLIB_PREFIX ${INSTALL_DIR})
 
 ExternalProject_Add(LibPNG
     URL http://download.sourceforge.net/libpng/libpng-1.2.52.tar.gz
+    URL_HASH SHA1=596a7dbc178861dab5761d74e6a4bfe66c0c31d1
     CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
         -DCMAKE_PREFIX_PATH:STRING=${ZLIB_PREFIX}
