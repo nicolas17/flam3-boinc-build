@@ -1,9 +1,9 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..6756848
+index 0000000..da9ec29
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,298 @@
+@@ -0,0 +1,301 @@
 +# This file is copyrighted under the BSD-license for buildsystem files of KDE
 +# copyright 2010, Patrick Spendrin <ps_ml@gmx.de>
 +
@@ -164,14 +164,17 @@ index 0000000..6756848
 +    endif(ENABLE_THREADS AND MINGW)
 +endif(WIN32)
 +
-+if(ZLIB_FOUND)
++if(WITH_ZLIB)
 +    target_link_libraries(xml2 ${ZLIB_LIBRARIES})
-+endif(ZLIB_FOUND)
++endif(WITH_ZLIB)
 +
 +if(WITH_ICONV)
 +    target_link_libraries(xml2 ${LIBICONV_LIBRARIES})
 +endif()
 +
++if(HAVE_LIBM)
++    target_link_libraries(xml2 m)
++endif()
 +
 +
 +######################################### Utilities ###############################################
