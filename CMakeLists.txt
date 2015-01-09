@@ -46,6 +46,7 @@ ExternalProject_Add(LibXml2
         -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
         -DCMAKE_PREFIX_PATH:STRING=${ZLIB_PREFIX}
         -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+        -DBUILD_tests:BOOL=OFF
     DEPENDS ZLIB
 )
 ExternalProject_Get_Property(LibXml2 INSTALL_DIR)
