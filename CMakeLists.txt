@@ -22,15 +22,19 @@ ExternalProject_Add(ZLIB
 ExternalProject_Get_Property(ZLIB INSTALL_DIR)
 set(ZLIB_PREFIX ${INSTALL_DIR})
 
-if(NOT WIN32)
-    ExternalProject_Add(LibPNG
-        URL http://download.sourceforge.net/libpng/libpng-1.2.52.tar.gz
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --disable-shared --with-zlib=${ZLIB_PREFIX}
-        DEPENDS ZLIB
-    )
-    ExternalProject_Get_Property(LibPNG INSTALL_DIR)
-    set(PNG_PREFIX ${INSTALL_DIR})
+ExternalProject_Add(LibPNG
+    URL http://download.sourceforge.net/libpng/libpng-1.2.52.tar.gz
+    CMAKE_CACHE_ARGS
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE};${ZLIB_PREFIX}
+        -DPNG_SHARED:BOOL=OFF
+        -DPNG_STATIC:BOOL=ON
+    DEPENDS ZLIB
+)
+ExternalProject_Get_Property(LibPNG INSTALL_DIR)
+set(PNG_PREFIX ${INSTALL_DIR})
 
+if(NOT WIN32)
     ExternalProject_Add(LibXml2
         URL ftp://xmlsoft.org/libxml2/libxml2-2.9.2.tar.gz
         CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --disable-shared --without-lzma --with-zlib=${ZLIB_PREFIX} --without-python
