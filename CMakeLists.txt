@@ -5,16 +5,23 @@ project(flam3boinc-build NONE)
 include(ExternalProject)
 
 if(WIN32)
-    message(FATAL_ERROR "This build system only works on Unix for now")
+    include(patch_win32.cmake)
 else()
-    ExternalProject_Add(ZLIB
-        URL http://zlib.net/zlib-1.2.8.tar.gz
-        CONFIGURE_COMMAND ./configure --static --prefix=<INSTALL_DIR>
-        BUILD_IN_SOURCE 1
-    )
-    ExternalProject_Get_Property(ZLIB INSTALL_DIR)
-    set(ZLIB_PREFIX ${INSTALL_DIR})
+    set(PATCH_PROGRAM patch)
+    add_custom_target(patch)
+endif()
+ExternalProject_Add(ZLIB
+    URL http://download.sourceforge.net/libpng/zlib/1.2.8/zlib-1.2.8.tar.gz
+    PATCH_COMMAND ${PATCH_PROGRAM} -p1 < ${CMAKE_SOURCE_DIR}/zlib-build-system.diff
+    CMAKE_CACHE_ARGS
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+    DEPENDS patch
+)
+ExternalProject_Get_Property(ZLIB INSTALL_DIR)
+set(ZLIB_PREFIX ${INSTALL_DIR})
 
+if(NOT WIN32)
     ExternalProject_Add(LibPNG
         URL http://download.sourceforge.net/libpng/libpng-1.2.52.tar.gz
         CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --disable-shared --with-zlib=${ZLIB_PREFIX}
