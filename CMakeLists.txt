@@ -35,15 +35,20 @@ ExternalProject_Add(LibPNG
 ExternalProject_Get_Property(LibPNG INSTALL_DIR)
 set(PNG_PREFIX ${INSTALL_DIR})
 
-if(NOT WIN32)
-    ExternalProject_Add(LibXml2
-        URL ftp://xmlsoft.org/libxml2/libxml2-2.9.2.tar.gz
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --disable-shared --without-lzma --with-zlib=${ZLIB_PREFIX} --without-python
-        DEPENDS ZLIB
-    )
-    ExternalProject_Get_Property(LibXml2 INSTALL_DIR)
-    set(XML2_PREFIX ${INSTALL_DIR})
+ExternalProject_Add(LibXml2
+    URL ftp://xmlsoft.org/libxml2/libxml2-2.8.0.tar.gz
+    URL_HASH SHA1=a0c553bd51ba79ab6fff26dc700004c6a41f5250
+    PATCH_COMMAND ${PATCH_PROGRAM} -p1 < ${CMAKE_SOURCE_DIR}/libxml2-2.8.0.diff
+    CMAKE_CACHE_ARGS
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DCMAKE_PREFIX_PATH:STRING=${ZLIB_PREFIX}
+        -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+    DEPENDS ZLIB
+)
+ExternalProject_Get_Property(LibXml2 INSTALL_DIR)
+set(XML2_PREFIX ${INSTALL_DIR})
 
+if(NOT WIN32)
     ExternalProject_Add(BOINC
         GIT_REPOSITORY git://boinc.berkeley.edu/boinc-v2.git
         CONFIGURE_COMMAND bash -c "(cd <SOURCE_DIR> && autoreconf -if) && <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --disable-shared --disable-client --disable-server --disable-manager"
