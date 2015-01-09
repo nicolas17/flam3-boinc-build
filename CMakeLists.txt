@@ -8,8 +8,9 @@ if(WIN32)
     include(patch_win32.cmake)
 else()
     set(PATCH_PROGRAM patch)
-    add_custom_target(patch)
+    add_custom_target(patch) # for "DEPENDS patch" to work
 endif()
+
 ExternalProject_Add(ZLIB
     URL http://download.sourceforge.net/libpng/zlib/1.2.8/zlib-1.2.8.tar.gz
     PATCH_COMMAND ${PATCH_PROGRAM} -p1 < ${CMAKE_SOURCE_DIR}/zlib-build-system.diff
