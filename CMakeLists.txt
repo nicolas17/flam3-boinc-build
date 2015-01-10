@@ -52,18 +52,21 @@ ExternalProject_Add(LibXml2
 ExternalProject_Get_Property(LibXml2 INSTALL_DIR)
 set(XML2_PREFIX ${INSTALL_DIR})
 
-if(NOT WIN32)
-    ExternalProject_Add(BOINC
-        GIT_REPOSITORY git://boinc.berkeley.edu/boinc-v2.git
-        CONFIGURE_COMMAND bash -c "(cd <SOURCE_DIR> && autoreconf -if) && <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --disable-shared --disable-client --disable-server --disable-manager"
-    )
-    ExternalProject_Get_Property(BOINC INSTALL_DIR)
-    set(BOINC_PREFIX ${INSTALL_DIR})
+ExternalProject_Add(BOINC
+    GIT_REPOSITORY git://github.com/nicolas17/boinc
+    GIT_TAG cmake
+    CMAKE_CACHE_ARGS
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+)
+ExternalProject_Get_Property(BOINC INSTALL_DIR)
+set(BOINC_PREFIX ${INSTALL_DIR})
 
-    ExternalProject_Add(flam3-boinc
-        GIT_REPOSITORY git://github.com/nicolas17/flam3-boinc
-        CMAKE_CACHE_ARGS -DCMAKE_PREFIX_PATH:STRING=${ZLIB_PREFIX};${PNG_PREFIX};${XML2_PREFIX};${BOINC_PREFIX}
-        INSTALL_COMMAND true
-        DEPENDS LibXml2 LibPNG BOINC
-    )
-endif()
+ExternalProject_Add(flam3-boinc
+    GIT_REPOSITORY git://github.com/nicolas17/flam3-boinc
+    CMAKE_CACHE_ARGS
+        -DCMAKE_PREFIX_PATH:STRING=${ZLIB_PREFIX};${PNG_PREFIX};${XML2_PREFIX};${BOINC_PREFIX}
+        -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+    INSTALL_COMMAND true
+    DEPENDS LibXml2 LibPNG BOINC
+)
