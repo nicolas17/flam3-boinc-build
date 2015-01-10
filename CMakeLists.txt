@@ -32,6 +32,7 @@ ExternalProject_Add(LibPNG
         -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
         -DPNG_SHARED:BOOL=OFF
         -DPNG_STATIC:BOOL=ON
+        -DPNG_NO_STDIO:BOOL=NO
     DEPENDS ZLIB
 )
 ExternalProject_Get_Property(LibPNG INSTALL_DIR)
